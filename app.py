@@ -3,6 +3,7 @@ import asyncio
 import sys
 from pyrogram import Client
 from pytgcalls.group_call_factory import GroupCallFactory
+from pytgcalls.types import MediaStream
 
 # جلب الإعدادات من متغيرات البيئة (Environment Variables) لحماية حسابك
 API_ID = os.environ.get("API_ID")
