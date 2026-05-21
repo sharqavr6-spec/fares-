@@ -1,7 +1,7 @@
 import os
 import asyncio
 import sys
-from pyrogram import Client
+from pyrogram import Client, idle
 from pytgcalls.group_call_factory import GroupCallFactory
 
 # جلب الإعدادات من متغياتالبيئة (Environment Variables) لحماية حسابك
