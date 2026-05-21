@@ -42,7 +42,8 @@ async def main():
     print("✅ تم تسجيل الدخول بنجاح إلى حساب تيليجرام!")
     
     print("⏳ جاري تشغيل محرك البث الصوتي...")
-    await call_py.start()
+    await call_py.start(CHAT_ID)
+
     print("✅ محرك البث جاهز تماماً!")
     
     try:
