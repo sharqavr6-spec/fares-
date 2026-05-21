@@ -36,34 +36,27 @@ app = Client(
 # تهيئة حزمة البث الصوتي
 call_py = GroupCallFactory(app).get_group_call()
 async def main():
-    print("⏳ ...جاري بدء تشغيل حساب المساعد")
     await app.start()
-    print("✅ تسجيل الدخول بنجاح إلى حساب تيليجرام")
-
-    print("⏳ جاري تشغيل محرك البث الصوتي...")
-
+    print("✅ الحساب المساعد سجل دخول بنجاح!")
+    
+    call_py = GroupCallFactory(app).get_group_call()
+    
     try:
-
-        # التأكد من تحويل الـ ID لرقم لو كان أرقام عشان المكتبة تقبله
         try:
             chat_id = int(CHAT_ID)
         except ValueError:
             chat_id = CHAT_ID
 
-        # 👇 السطرين دول لازم يتزقوا لجوه كده عشان يبقوا تحت الـ try الكبيرة
         print("🎙️ ..جاري بدء البث المباشر في القناة/المجموعة")
         print(f"🔗 رابط الإذاعة المستخدم: {RADIO_URL}")
 
-        await call_py.start(
-            chat_id,
-            MediaStream(
-                RADIO_URL,
-                video_flags=MediaStream.Flags.IGNORE,
-            )
-        )
+        # التعديل الصح للنسخة القديمة: استخدام join بدلاً من start
+        call_py.input_filename = RADIO_URL
+        await call_py.join(chat_id)
 
-                print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7")
+        print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7")
         await idle()
+
     except Exception as e:
         print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
 
