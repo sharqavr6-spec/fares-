@@ -34,7 +34,7 @@ app = Client(
 )
 
 # تهيئة حزمة البث الصوتي
-call_py = PyTgCalls(app)
+call_py = GroupCallFactory(app).get_group_call()
 
 async def main():
     print("⏳ جاري بدء تشغيل حساب المساعد...")
