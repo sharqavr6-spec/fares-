@@ -1,3 +1,3 @@
 Pyrogram
 TgCrypto
-pytgcalls
+pytgcalls==2.1.0
