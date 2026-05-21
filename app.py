@@ -1,9 +1,10 @@
 import os
 import asyncio
-
 from pyrogram import Client, idle
 from pytgcalls import PyTgCalls
-from pytgcalls.types.input_stream import AudioPiped
+from pyrogram import Client, idle
+from pytgcalls import PyTgCalls
+from pytgcalls.types.input_stream.audio_piped import AudioPiped
 
 # بيانات تيليجرام
 API_ID = int(os.environ.get("API_ID"))
