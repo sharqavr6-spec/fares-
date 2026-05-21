@@ -2,7 +2,7 @@ import os
 import asyncio
 import sys
 from pyrogram import Client
-from pytgcalls.pytgcalls import PyTgCalls
+from pytgcalls import PyTgCalls
 from pytgcalls.types import MediaStream
 
 # جلب الإعدادات من متغيرات البيئة (Environment Variables) لحماية حسابك
