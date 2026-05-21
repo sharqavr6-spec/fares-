@@ -45,20 +45,29 @@ async def main():
     try:
 
         # التأكد من تحويل الـ ID لرقم لو كان أرقام عشان المكتبة تقبله
+            try:
+        # التأكد من تحويل الـ ID لرقم عشان المكتبة تقبله
         try:
             chat_id = int(CHAT_ID)
         except ValueError:
             chat_id = CHAT_ID
 
-        print("🎙️ جاري بدء البث المباشر في القناة/المجموعة...")
+        print("🎙️ ..جاري بدء البث المباشر في القناة/المجموعة")
         print(f"🔗 رابط الإذاعة المستخدم: {RADIO_URL}")
-        
-        # بدء تشغيل المكالمة والبث مباشرة باستخدام group_call الصحيح
-        await group_call.start(chat_id)
-        
-        print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7!")
-        await idle()  # إبقاء السكريبت يعمل باستمرار
-        
+
+        # تشغيل المكالمة وبث الرابط مباشرة باستخدام المتغير الصح
+        await call_py.start(
+            chat_id,
+            MediaStream(
+                RADIO_URL,
+                video_flags=MediaStream.Flags.IGNORE,
+            )
+        )
+
+        print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7")
+        await idle()
+
     except Exception as e:
         print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
+
 
