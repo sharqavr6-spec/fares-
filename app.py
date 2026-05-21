@@ -2,6 +2,7 @@ import os
 import asyncio
 import os
 from pyrogram import Client, idle
+from pytgcalls.types.input_stream import AudioPiped
 from pytgcalls.group_call_factory import GroupCallFactory
 
 # جلب الإعدادات من متغياتالبيئة (Environment Variables) لحماية حسابك
