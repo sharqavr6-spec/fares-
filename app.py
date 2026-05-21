@@ -51,7 +51,7 @@ async def main():
         print(f"🔗 رابط الإذاعة المستخدم: {RADIO_URL}")
         
         # تشغيل البث المباشر للإذاعة مع تجاهل الفيديو لتقليل الموارد وضمان الاستقرار
-        await call_py.join_call(
+        await call_py.join(
     CHAT_ID,
     MediaStream(
         RADIO_URL,
