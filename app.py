@@ -62,6 +62,9 @@ async def main():
             )
         )
 
-        print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7")
+                print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7")
         await idle()
+    except Exception as e:
+        print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
 
+app.run(main())
