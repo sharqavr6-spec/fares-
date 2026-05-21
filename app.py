@@ -42,28 +42,27 @@ async def main():
     call_py = GroupCallFactory(app).get_group_call()
     
     try:
-        try:
-            chat_id = int(CHAT_ID)
-        except ValueError:
-            chat_id = CHAT_ID
+    try:
+        chat_id = int(CHAT_ID)
+    except ValueError:
+        chat_id = CHAT_ID
 
-            # ... الكود اللي فوق زي ما هو
     print("🎙️ البث المباشر في القناة/المجموعة..")
     print(f"🔗 رابط الإذاعة المستخدم {RADIO_URL}")
-    
-    # التعديل الصح للمسافات:
+
     call_py.input_filename = RADIO_URL
     await app.get_chat(chat_id)
-    
+
     await call_py.start(
         chat_id,
         AudioPiped(RADIO_URL)
     )
-    
+
     print("🎉 24/7 البث يعمل الآن بنجاح وبدون انقطاع")
     await idle()
-    
+
 except Exception as e:
     print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
 
-app.run(main())
+asyncio.run(main())
+
