@@ -40,29 +40,29 @@ async def main():
     print("✅ الحساب المساعد سجل دخول بنجاح!")
     
     call_py = GroupCallFactory(app).get_group_call()
-    
+
     try:
         try:
-        chat_id = int(CHAT_ID)
-    except ValueError:
-        chat_id = CHAT_ID
+            chat_id = int(CHAT_ID)
+        except ValueError:
+            chat_id = CHAT_ID
 
-    print("🎙️ البث المباشر في القناة/المجموعة..")
-    print(f"🔗 رابط الإذاعة المستخدم {RADIO_URL}")
+        print("🎙️ البث المباشر في القناة/المجموعة..")
+        print(f"🔗 رابط الإذاعة المستخدم {RADIO_URL}")
 
-    call_py.input_filename = RADIO_URL
-    await app.get_chat(chat_id)
+        call_py.input_filename = RADIO_URL
+        await app.get_chat(chat_id)
 
-    await call_py.start(
-        chat_id,
-        AudioPiped(RADIO_URL)
-    )
+        await call_py.start(
+            chat_id,
+            AudioPiped(RADIO_URL)
+        )
 
-    print("🎉 24/7 البث يعمل الآن بنجاح وبدون انقطاع")
-    await idle()
+        print("🎉 24/7 البث يعمل الآن بنجاح وبدون انقطاع")
+        await idle()
 
-except Exception as e:
-    print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
+    except Exception as e:
+        print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
 
 asyncio.run(main())
-
+    
