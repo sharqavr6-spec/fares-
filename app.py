@@ -1,6 +1,6 @@
 import os
 import asyncio
-import sys
+import os
 from pyrogram import Client, idle
 from pytgcalls.group_call_factory import GroupCallFactory
 
