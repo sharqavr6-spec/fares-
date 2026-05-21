@@ -34,18 +34,21 @@ app = Client(
 )
 
 # تهيئة حزمة البث الصوتي
-call_py = GroupCallFactory(app).get_group_call()
+call_py = PyTgCalls(app)
 async def main():
     await app.start()
     print("✅ الحساب المساعد سجل دخول بنجاح!")
     
-    call_py = GroupCallFactory(app).get_group_call()
+    call_py = PyTgCalls(app)
 
     try:
         try:
-            chat_id = int(CHAT_ID)
-        except ValueError:
-            chat_id = CHAT_ID
+            await call_py.start()
+
+            await call_py.join_group_call(
+             chat_id,
+              AudioPiped(RADIO_URL)
+)
 
         print("🎙️ البث المباشر في القناة/المجموعة..")
         print(f"🔗 رابط الإذاعة المستخدم {RADIO_URL}")
