@@ -2,7 +2,7 @@ import os
 import asyncio
 import sys
 from pyrogram import Client
-from pytgcalls.pytgcalls import PyTgCalls
+from pytgcalls.group_call_factory import GroupCallFactory
  
 
 # المتغيرات الثابتة مباشرة بدلاً من os.environ.get
