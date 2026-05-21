@@ -3,9 +3,8 @@ import asyncio
 import sys
 from pyrogram import Client
 from pytgcalls.group_call_factory import GroupCallFactory
-from pytgcalls.types import MediaStream
 
-# جلب الإعدادات من متغيرات البيئة (Environment Variables) لحماية حسابك
+# جلب الإعدادات من متغياتالبيئة (Environment Variables) لحماية حسابك
 API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESSION_STRING = os.environ.get("SESSION_STRING")
@@ -42,33 +41,24 @@ async def main():
     await app.start()
     print("✅ تم تسجيل الدخول بنجاح إلى حساب تيليجرام!")
     
-    print("⏳ جاري تشغيل محرك البث الصوتي...")
-    await call_py.start(CHAT_ID)
+        print("⏳ جاري تشغيل محرك البث الصوتي...")
 
-    print("✅ محرك البث جاهز تماماً!")
-    
     try:
-        print(f"🎙️ جاري بدء البث المباشر في القناة/المجموعة: {CHAT_ID}")
+        # التأكد من تحويل الـ ID لرقم لو كان أرقام عشان المكتبة تقبله
+        try:
+            chat_id = int(CHAT_ID)
+        except ValueError:
+            chat_id = CHAT_ID
+
+        print("🎙️ جاري بدء البث المباشر في القناة/المجموعة...")
         print(f"🔗 رابط الإذاعة المستخدم: {RADIO_URL}")
         
-        # تشغيل البث المباشر للإذاعة مع تجاهل الفيديو لتقليل الموارد وضمان الاستقرار
-        await call_py.join(
-    CHAT_ID,
-    MediaStream(
-        RADIO_URL,
-        video_flags=MediaStream.Flags.IGNORE,
-    )
-)
-
+        # بدء تشغيل المكالمة والبث مباشرة باستخدام group_call الصحيح
+        await group_call.start(chat_id)
+        
         print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7!")
-        await idle()  # إبقاء السكربت يعمل باستمرار
+        await idle()  # إبقاء السكريبت يعمل باستمرار
         
     except Exception as e:
-        print(f"❌ حدث خطأ غير متوقع أثناء البث: {e}")
-    finally:
-        print("👋 جاري إغلاق السكربت...")
+        print(f"❌ حدث خطأ أثناء تشغيل البث: {e}")
 
-if __name__ == "__main__":
-    # تشغيل الحلقة البرمجية غير المتزامنة لضمان استقرار الاتصال
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
