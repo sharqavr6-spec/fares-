@@ -1,9 +1,8 @@
 import os
 import asyncio
-import os
 from pyrogram import Client, idle
-from pytgcalls import StreamType
-from pytgcalls.group_call_factory import GroupCallFactory
+from pytgcalls import PyTgCalls
+from pytgcalls.types.input_stream import AudioPiped
 
 # جلب الإعدادات من متغياتالبيئة (Environment Variables) لحماية حسابك
 API_ID = os.environ.get("API_ID")
