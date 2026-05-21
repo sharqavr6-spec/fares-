@@ -2,7 +2,7 @@ import os
 import asyncio
 import sys
 from pyrogram import Client
-from pytgcalls import PyTgCalls
+from pytgcalls.pytgcalls import PyTgCalls
 from pytgcalls.types import AudioPiped
 
 API_ID = os.environ.get("API_ID")
