@@ -51,13 +51,14 @@ async def main():
         print(f"🔗 رابط الإذاعة المستخدم: {RADIO_URL}")
         
         # تشغيل البث المباشر للإذاعة مع تجاهل الفيديو لتقليل الموارد وضمان الاستقرار
-        await call_py.join_group_call(
+        await call_py.join_call(
     CHAT_ID,
     MediaStream(
         RADIO_URL,
         video_flags=MediaStream.Flags.IGNORE,
-            )
-        )
+    )
+)
+
         print("🎉 البث يعمل الآن بنجاح وبدون انقطاع 24/7!")
         await idle()  # إبقاء السكربت يعمل باستمرار
         
