@@ -2,8 +2,8 @@ import os
 import asyncio
 import sys
 from pyrogram import Client
-from pytgcalls.group_call_factory import GroupCallFactory
-from pytgcalls.types.input_stream import AudioPiped
+from pytgcalls import PyTgCalls
+from pytgcalls.types import AudioPiped
 API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESSION_STRING = os.environ.get("SESSION_STRING")
