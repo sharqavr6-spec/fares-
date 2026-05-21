@@ -2,7 +2,7 @@ import os
 import asyncio
 import sys
 from pyrogram import Client
-from pytgcalls.group_call_factory import GroupCallFactory
+from pytgcalls import PyTgCalls 
 
 # المتغيرات الثابتة مباشرة بدلاً من os.environ.get
 API_ID = 24941393
