@@ -12,9 +12,9 @@ RADIO_URL = os.environ.get("RADIO_URL", "https://stream.quranrad.io/abdulbasit")
 
 app = Client(
     "quran-radio",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    session_string=SESSION_STRING,
+    API_ID,
+    API_HASH,
+    session_string=SESSION_STRING
 )
 
 call_py = PyTgCalls(app)
