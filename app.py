@@ -2,8 +2,6 @@ import os
 import asyncio
 from pyrogram import Client, idle
 from pytgcalls import PyTgCalls
-from pyrogram import Client, idle
-from pytgcalls import PyTgCalls
 from pytgcalls.types.input_stream.audio_piped import AudioPiped
 
 # بيانات تيليجرام
