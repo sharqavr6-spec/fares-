@@ -1,5 +1,5 @@
-pyrogram==2.0.0
-pytgcalls==3.0.0.dev24
+pyrogram
 tgcrypto
+pytgcalls==2.4.0.dev4  # أو الإصدار المتوافق مع كودك الحالي
 ntplib
-opencv-python-headless
+
