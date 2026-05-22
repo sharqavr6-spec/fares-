@@ -2,7 +2,7 @@ import os
 import time
 import ntplib
 from pyrogram import Client, filters
-from from pytgcalls import PyTgCalls
+from from pytgcalls import PyTgCall 
 from pytgcalls.types import AudioPiped
 
 def sync_time_via_ntp():
