@@ -1,10 +1,14 @@
 import os
 import asyncio
 import sys
+import ntplib  # ✅ تم إصلاح الخطأ: إضافة المكتبة الناقصة لمزامنة الوقت
 from pyrogram import Client
 from pytgcalls.group_call_factory import GroupCallFactory
 from pytgcalls.types import AudioPiped
 
+# ----------------------------------------
+# 1. دالة مزامنة وقت السيرفر
+# ----------------------------------------
 def sync_time_via_ntp():
     print("⏳ جاري محاولة مزامنة الوقت مع خوادم NTP...")
     ntp_servers = ['pool.ntp.org', 'time.google.com', 'time.windows.com']
@@ -33,66 +37,73 @@ def sync_time_via_ntp():
         except Exception as e:
             print(f"❌ فشل الاتصال بالسيرفر {server}: {e}")
             continue
-    
-    print("🚨 فشل جميع محاولات مزامنة الوقت عبر NTP.")
     return False
 
+# تشغيل مزامنة الوقت قبل بدء البوت لتفادي مشاكل الـ Session Expired
 sync_time_via_ntp()
 
-api_id = os.environ.get("API_ID")
-api_hash = os.environ.get("API_HASH")
-radio_url = os.environ.get("RADIO_URL")
-session_string = os.environ.get("SESSION")
-chat_username = os.environ.get("CHAT_ID")
+# ----------------------------------------
+# 2. جلب إعدادات البيئة (Environment Variables)
+# ----------------------------------------
+API_ID = int(os.environ.get("API_ID", 123456))          # استبدله بـ API ID الخاص بك
+API_HASH = os.environ.get("API_HASH", "your_api_hash")  # استبدله بـ API HASH الخاص بك
 
-app = Client("my_account", api_id=int(api_id), api_hash=api_hash, session_string=session_string)
-call = PyTgCalls(app)
+# إذا كنت تستخدم حساب شخصي (وهو الأفضل للمكالمات الصوتية) استخدم كود الجلسة (String Session)
+SESSION_STRING = os.environ.get("SESSION_STRING", None)
+BOT_TOKEN = os.environ.get("BOT_TOKEN", None)            # إذا كنت تستخدم بوت عادي بدلاً من الحساب
 
-@app.on_message(filters.command("start_stream") & filters.me)
-async def start_stream(client, message):
+# معرف الدردشة (الجروب أو القناة) ورابط البث الصوتي
+CHAT_ID = int(os.environ.get("CHAT_ID", -100123456789)) 
+STREAM_URL = os.environ.get("STREAM_URL", "http://stream.zeno.fm/f97vpt67v0uuv") # كمثال لرابط راديو أو ملف صوتي
+
+# ----------------------------------------
+# 3. تهيئة وتجهيز العميل ومصنع الاتصال
+# ----------------------------------------
+if SESSION_STRING:
+    app = Client("tg_account", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING)
+else:
+    app = Client("tg_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+
+# إنشاء كائن المكالمة من خلال الفاكتوري المتوافق مع إصدارك
+group_call_factory = GroupCallFactory(app)
+group_call = group_call_factory.get_group_call()
+
+# ----------------------------------------
+# 4. دالة التشغيل الرئيسية والتحكم في البث
+# ----------------------------------------
+async def main():
+    print("🚀 جاري تشغيل عميل تليجرام...")
+    await app.start()
+    
+    print("🎵 جاري تشغيل محرك PyTgCalls...")
+    await group_call.start()
+    
     try:
-        await call.join_group_call(
-            chat_username,
-            AudioPiped(radio_url)
-        )
-        await message.reply_text("✅ تم بدء بث الراديو بنجاح.")
+        print(f"📞 جاري الانضمام إلى المكالمة الصوتية في المجموعه: {CHAT_ID}...")
+        await group_call.join(CHAT_ID)
+        
+        # تجهيز رابط البث الصوتي وتمريره للمكالمة
+        audio_stream = AudioPiped(STREAM_URL)
+        await group_call.change_stream(audio_stream)
+        print(f"▶️ بدأ البث الصوتي بنجاح الآن!")
+        
+        # إبقاء البوت يعمل بشكل مستمر دون توقف
+        await asyncio.Event().wait()
+        
     except Exception as e:
-        await message.reply_text(f"❌ فشل بدء البث: {e}")
+        print(f"❌ حدث خطأ أثناء تشغيل البث أو الانضمام: {e}")
+    finally:
+        # إغلاق آمن للاتصالات في حال توقف السكريبت
+        print("🛑 جاري إيقاف التشغيل وإغلاق الجلسات...")
+        try:
+            await group_call.stop()
+            await app.stop()
+        except Exception:
+            pass
 
-@app.on_message(filters.command("stop_stream") & filters.me)
-async def stop_stream(client, message):
+if __name__ == "__main__":
+    # تشغيل حلقة asyncio لتشغيل البوت بالكامل
     try:
-        await call.leave_group_call(chat_username)
-        await message.reply_text("⏹️ تم إيقاف بث الراديو.")
-    except Exception as e:
-        await message.reply_text(f"❌ فشل إيقاف البث: {e}")
-
-@app.on_message(filters.command("pause_stream") & filters.me)
-async def pause_stream(client, message):
-    try:
-        await call.pause_stream(chat_username)
-        await message.reply_text("⏸️ تم إيقاف البث مؤقتاً.")
-    except Exception as e:
-        await message.reply_text(f"❌ فشل الإيقاف المؤقت: {e}")
-
-@app.on_message(filters.command("resume_stream") & filters.me)
-async def resume_stream(client, message):
-    try:
-        await call.resume_stream(chat_username)
-        await message.reply_text("▶️ تم استئناف البث.")
-    except Exception as e:
-        await message.reply_text(f"❌ فشل استئناف البث: {e}")
-
-@app.on_message(filters.command("change_radio_url") & filters.me)
-async def change_radio_url(client, message):
-    global radio_url
-    if len(message.command) > 1:
-        radio_url = message.command[1]
-        await message.reply_text(f"تم تحديث الرابط إلى: {radio_url}")
-        if call.is_connected:
-            await start_stream(client, message)
-    else:
-        await message.reply_text("يرجى إرسال الرابط الجديد.")
-
-with app:
-    app.run()
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("👋 تم إيقاف البوت يدوياً.")
