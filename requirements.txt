@@ -1,5 +1,5 @@
 pyrogram==2.0.0
-pytgcalls==3.0.0.dev25
+pytgcalls==3.0.0.dev8
 tgcrypto
 ntplib
 opencv-python-headless
