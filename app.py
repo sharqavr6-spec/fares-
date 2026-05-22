@@ -1,25 +1,35 @@
 import os
 import asyncio
+import time
 import ntplib  
 from pyrogram import Client
 from pytgcalls import GroupCallFactory
 
 # ----------------------------------------
-# 1. دالة مزامنة وقت السيرفر
+# 1. دالة المزامنة وتصحيح الوقت (Monkey Patch)
 # ----------------------------------------
 def sync_time_via_ntp():
-    print("⏳ جاري محاولة مزامنة الوقت مع خوادم NTP...")
+    print("⏳ جاري محاولة مزامنة الوقت وتصحيح الساعة مع خوادم NTP...")
     ntp_servers = ['pool.ntp.org', 'time.google.com', 'time.windows.com']
     client = ntplib.NTPClient()
+    
     for server in ntp_servers:
         try:
             response = client.request(server, version=3, timeout=5)
-            print(f"✅ تم الاتصال بنجاح بـ {server}.")
+            offset = response.offset  # الفارق الدقيق بالثواني
+            
+            # تعديل دالة الوقت الافتراضية لبايثون لتصحيح الترحيل تلقائياً
+            real_time = time.time
+            time.time = lambda: real_time() + offset
+            
+            print(f"✅ تم الاتصال بنجاح بـ {server}. تم تطبيق فارق الوقت: {offset} ثانية.")
             return True
         except Exception:
             continue
+    print("⚠️ فشل تعديل الوقت، سيتم الاعتماد على وقت السيرفر الافتراضي.")
     return False
 
+# تشغيل الخدعة فوراً قبل تهيئة أي اتصال لتفادي خطأ msg_id
 sync_time_via_ntp()
 
 # ----------------------------------------
@@ -40,7 +50,6 @@ if SESSION_STRING:
 else:
     app = Client("tg_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
-# طريقة استدعاء المحرك الخاصة بنسخة 3.0.0.dev24
 group_call_factory = GroupCallFactory(app)
 group_call = group_call_factory.get_group_call()
 
@@ -56,7 +65,6 @@ async def main():
         await group_call.join(CHAT_ID)
         
         print(f"🎵 جاري بدء البث الصوتي من الرابط مباشرة...")
-        # في نسخة dev24 نمرر رابط البث المباشر داخل دالة start_audio فوراً
         await group_call.start_audio(STREAM_URL)
         print(f"✅ بدأ البث الصوتي بنجاح الآن!")
         
