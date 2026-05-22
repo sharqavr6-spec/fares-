@@ -1,4 +1,4 @@
-pyrogram
-pytgcalls
+pyrogram==2.0.0
+pytgcalls==2.0.0
 tgcrypto
 ntplib
