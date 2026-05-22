@@ -1,8 +1,8 @@
 import os
-import time
-import ntplib
-from pyrogram import Client, filters
-from pytgcalls import PyTgCall 
+import asyncio
+import sys
+from pyrogram import Client
+from pytgcalls.group_call_factory import GroupCallFactory
 from pytgcalls.types import AudioPiped
 
 def sync_time_via_ntp():
